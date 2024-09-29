@@ -4,6 +4,8 @@ import AppError from '../../errors/AppError'
 import { TLoginUser } from './auth.interface'
 import { createToken } from './auth.utils'
 import { User } from '../user/user.model'
+import bcrypt from 'bcrypt'
+import { TRecoverPassword } from '../user/user.interface'
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
@@ -38,6 +40,44 @@ const loginUser = async (payload: TLoginUser) => {
   }
 }
 
+const hashPassword = async (password: string): Promise<string> => {
+  return await bcrypt.hash(password, Number(config.bcrypt_salt_rounds))
+}
+
+const recoverPasswordIntoDB = async (payload: TRecoverPassword) => {
+  const { email, phone, password } = payload
+  const isUserAvailable = await User.findOne({ email })
+  if (!isUserAvailable) {
+    throw new Error('User not available!')
+  }
+  if (phone === isUserAvailable.phone) {
+    const hashedPassword = await bcrypt.hash(
+      password,
+      Number(config.bcrypt_salt_rounds),
+    )
+    const updateUserPassword = await User.findOneAndUpdate(
+      { email }, // Find the user by email
+      { password: hashedPassword }, // Update the password field
+      { new: true }, // Return the updated user
+    )
+    return updateUserPassword
+  } else {
+    throw new Error('You are not authorized!')
+  }
+}
+
+const changePasswordIntoDB = async (email: string, payload: string) => {
+  const hashedPassword = await hashPassword(payload)
+  const changeUserPassword = await User.findOneAndUpdate(
+    { email }, // Find the user by email
+    { password: hashedPassword }, // Update the password field
+    { new: true }, // Return the updated user
+  )
+  return changeUserPassword
+}
+
 export const AuthServices = {
   loginUser,
+  recoverPasswordIntoDB,
+  changePasswordIntoDB,
 }

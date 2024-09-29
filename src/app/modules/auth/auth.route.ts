@@ -8,6 +8,8 @@ import { multerUpload } from '../../config/multer.config'
 import validateImageFileRequest from '../../middlewares/validateImageFileRequest'
 import { ImageFilesArrayZodSchema } from '../../zod/image.validation'
 import { parseBody } from '../../middlewares/bodyParser'
+import { USER_ROLE } from '../user/user.constant'
+import auth from '../../middlewares/auth'
 
 const router = express.Router()
 
@@ -23,6 +25,12 @@ router.post(
   parseBody,
   validateRequest(UserValidations.createUserValidationSchema),
   userControllers.createUser,
+)
+router.put('/recover-password', AuthControllers.passwordRecover)
+router.put(
+  '/change-password',
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  AuthControllers.changePassword,
 )
 
 export const AuthRoutes = router

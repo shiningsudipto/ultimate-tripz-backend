@@ -63,3 +63,9 @@ export interface TGetBookingsResponse {
   message: string
   data: IBooking[]
 }
+
+export type TRecoverPassword = {
+  email: string
+  phone: string
+  password: string
+}
