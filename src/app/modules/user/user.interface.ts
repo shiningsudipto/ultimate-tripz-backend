@@ -8,7 +8,8 @@ export type TUser = {
   password: string
   phone: string
   role: 'admin' | 'user'
-  address: string
+  address?: string
+  avatar: string
 }
 
 export interface UserModel extends Model<TUser> {

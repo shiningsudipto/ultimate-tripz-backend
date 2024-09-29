@@ -1,7 +1,6 @@
 import config from '../../config'
 import { TBooking } from '../booking/booking.interface'
 import { Booking } from '../booking/booking.model'
-import { Slot } from '../slot/slot.model'
 import { verifyPayment } from './payment.utils'
 
 const confirmationService = async (
@@ -15,12 +14,7 @@ const confirmationService = async (
     const bookingInfo = (await Booking.findOne({
       tran_id: transactionId,
     })) as TBooking
-    const slotId = bookingInfo.slot
-    const slotInfo = await Slot.findById(slotId)
-    if (slotInfo) {
-      slotInfo.isBooked = 'booked'
-      await slotInfo.save()
-    }
+
     await Booking.findOneAndUpdate(
       { tran_id: transactionId },
       {

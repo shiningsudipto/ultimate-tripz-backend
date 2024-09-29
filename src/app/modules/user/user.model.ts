@@ -14,7 +14,8 @@ const userSchema = new Schema<TUser, UserModel>(
       enum: ['admin', 'user'],
       default: 'user',
     },
-    address: { type: String, required: true },
+    avatar: { type: String, required: true },
+    address: { type: String, required: false },
   },
   {
     timestamps: true,
@@ -39,12 +40,6 @@ userSchema.methods.toJSON = function () {
 
   return userObject
 }
-
-// set '' after saving password
-// userSchema.post('save', function (doc, next) {
-//   doc.password = ''
-//   next()
-// })
 
 // Static method to find user by email
 userSchema.statics.isUserExistsByEmail = async function (email: string) {

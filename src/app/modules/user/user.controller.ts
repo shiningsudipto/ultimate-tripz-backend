@@ -6,9 +6,18 @@ import httpStatus from 'http-status'
 import { getUserInfoFromToken } from '../../utils/getUserInfoFromToken'
 import { handleNoDataResponse } from '../../errors/handleNoData'
 import { User } from './user.model'
+import { TUser } from './user.interface'
 
 const createUser = catchAsync(async (req, res) => {
-  const userData = req.body
+  const userInfo = req.body
+  const files = req.files as { avatar?: Express.Multer.File[] }
+  const userAvatar = files?.avatar?.[0]?.path
+
+  const userData: TUser = {
+    ...userInfo,
+    avatar: userAvatar,
+  }
+
   const result = await userServices.createUserIntoDb(userData)
   sendResponse(res, {
     statusCode: httpStatus.OK,

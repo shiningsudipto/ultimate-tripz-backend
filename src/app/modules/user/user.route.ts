@@ -4,9 +4,20 @@ import { USER_ROLE } from './user.constant'
 import { userControllers } from './user.controller'
 import validateRequest from '../../middlewares/validateRequest'
 import { UserValidations } from './user.validation'
+import { multerUpload } from '../../config/multer.config'
+import validateImageFileRequest from '../../middlewares/validateImageFileRequest'
+import { ImageFilesArrayZodSchema } from '../../zod/image.validation'
 
 const router = express.Router()
 // user routes
+
+router.post(
+  '/create-user',
+  multerUpload.fields([{ name: 'avatar' }]),
+  validateImageFileRequest(ImageFilesArrayZodSchema),
+  userControllers.createUser,
+)
+
 router.get('/my-bookings', auth(USER_ROLE.user), userControllers.getMyBookings)
 router.get('/users', auth(USER_ROLE.admin), userControllers.getAllUser)
 router.get('/user-info', userControllers.getUserByEmail)

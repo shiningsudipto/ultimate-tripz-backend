@@ -1,7 +1,5 @@
 import { transactionId } from '../../utils/utils'
 import { initiatePayment } from '../payment/payment.utils'
-import { Service } from '../service/service.model'
-import { Slot } from '../slot/slot.model'
 import { User } from '../user/user.model'
 import { TBooking, TBookingRequest } from './booking.interface'
 import { Booking } from './booking.model'
@@ -14,14 +12,6 @@ const createBookingIntoDB = async (
   const userInfo = await User.findOne({ email })
   if (!userInfo) {
     throw new Error('User not found')
-  }
-  const serviceInfo = await Service.findById({ _id: bookingData?.serviceId })
-  if (!serviceInfo) {
-    throw new Error('Service not found')
-  }
-  const slotInfo = await Slot.findById({ _id: bookingData?.slotId })
-  if (!slotInfo) {
-    throw new Error('Slot not found')
   }
 
   const paymentData = {
@@ -38,8 +28,6 @@ const createBookingIntoDB = async (
 
   const newBookingData: Partial<TBooking> = {
     customer: userInfo._id,
-    service: serviceInfo._id,
-    slot: slotInfo._id,
     vehicleType: bookingData.vehicleType,
     vehicleBrand: bookingData.vehicleBrand,
     vehicleModel: bookingData.vehicleModel,
