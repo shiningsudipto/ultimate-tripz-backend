@@ -4,6 +4,7 @@ import catchAsync from '../../utils/catchAsync'
 import { TPost } from './post.interface'
 import { TImageFiles } from '../../interface/image.interface'
 import { postServices } from './post.service'
+import Post from './post.model'
 
 const createPost = catchAsync(async (req, res) => {
   const postInfo = req.body
@@ -34,6 +35,17 @@ const getAllPosts = catchAsync(async (req, res) => {
     data: result,
   })
 })
+
+const deletePost = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await Post.findByIdAndDelete(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Post deleted successfully',
+    data: result,
+  })
+})
 const updatePost = catchAsync(async (req, res) => {
   const { id } = req.params
   const postInfo = req.body
@@ -51,9 +63,14 @@ const updatePost = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Post retrieved successfully',
+    message: 'Post updated successfully',
     data: result,
   })
 })
 
-export const postControllers = { createPost, getAllPosts, updatePost }
+export const postControllers = {
+  createPost,
+  getAllPosts,
+  updatePost,
+  deletePost,
+}

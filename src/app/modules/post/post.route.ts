@@ -17,6 +17,11 @@ router.put(
   auth(USER_ROLE.admin, USER_ROLE.user),
   postControllers.updatePost,
 )
+router.delete(
+  '/delete-post/:id',
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  postControllers.deletePost,
+)
 
 router.post(
   '/create-post',
