@@ -1,8 +1,7 @@
 import { Types } from 'mongoose'
 
 export interface TComment {
-  userId: string
-  name: string
+  commenter: Types.ObjectId
   content: string
 }
 export interface TPost {

@@ -4,8 +4,7 @@ import { TComment, TPost } from './post.interface'
 // Comment Schema
 const CommentSchema: Schema = new Schema<TComment>(
   {
-    userId: { type: String, required: true },
-    name: { type: String, required: true },
+    commenter: { type: Schema.Types.ObjectId, ref: 'user', required: true },
     content: { type: String, required: true },
   },
   {
