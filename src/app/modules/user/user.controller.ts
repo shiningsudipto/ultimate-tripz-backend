@@ -26,7 +26,6 @@ const createUser = catchAsync(async (req, res) => {
     data: result,
   })
 })
-
 const getAllUser = catchAsync(async (req, res) => {
   const result = await User.find()
   sendResponse(res, {
@@ -47,11 +46,18 @@ const getUserByEmail = catchAsync(async (req, res) => {
     data: result,
   })
 })
-
 const updateUser = catchAsync(async (req, res) => {
   const { id } = req.params
-  const payload = req.body
-  const result = await userServices.updateUserIntoDB(id, payload)
+  const userInfo = req.body
+  const files = req.files as { avatar?: Express.Multer.File[] }
+  const userAvatar = files?.avatar?.[0]?.path
+
+  const updatedUserData: Partial<TUser> = {
+    ...userInfo,
+    ...(userAvatar ? { avatar: userAvatar } : {}), // Only include avatar if it exists
+  }
+  const result = await userServices.updateUserIntoDB(id, updatedUserData)
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
