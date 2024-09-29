@@ -7,6 +7,7 @@ import { UserValidations } from './user.validation'
 import { multerUpload } from '../../config/multer.config'
 import validateImageFileRequest from '../../middlewares/validateImageFileRequest'
 import { ImageFilesArrayZodSchema } from '../../zod/image.validation'
+import { parseBody } from '../../middlewares/bodyParser'
 
 const router = express.Router()
 // user routes
@@ -15,6 +16,8 @@ router.post(
   '/create-user',
   multerUpload.fields([{ name: 'avatar' }]),
   validateImageFileRequest(ImageFilesArrayZodSchema),
+  parseBody,
+  validateRequest(UserValidations.createUserValidationSchema),
   userControllers.createUser,
 )
 

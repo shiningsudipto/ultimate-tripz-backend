@@ -10,11 +10,6 @@ const createUserValidationSchema = z.object({
     email: z.string({
       invalid_type_error: 'Email must be a string',
     }),
-    avatar: z
-      .string({
-        invalid_type_error: 'avatar is required zod',
-      })
-      .email('Invalid email address'),
     password: z
       .string({
         invalid_type_error: 'Password must be a string',
@@ -36,7 +31,7 @@ const createUserValidationSchema = z.object({
       .string({
         invalid_type_error: 'Address must be a string',
       })
-      .min(1, 'Address is required'),
+      .optional(),
   }),
 })
 

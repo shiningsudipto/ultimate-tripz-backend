@@ -7,6 +7,7 @@ const app: Application = express()
 
 // parser
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
     origin: ['https://car-wash-zeta-one.vercel.app', 'http://localhost:5173'], // Allow your frontend URL
