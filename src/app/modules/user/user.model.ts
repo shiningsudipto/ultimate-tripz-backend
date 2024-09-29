@@ -14,6 +14,11 @@ const userSchema = new Schema<TUser, UserModel>(
       enum: ['admin', 'user'],
       default: 'user',
     },
+    status: {
+      type: String,
+      enum: ['basic', 'premium'],
+      default: 'basic',
+    },
     avatar: { type: String },
     address: { type: String, required: false },
   },

@@ -1,4 +1,4 @@
-import { TComment, TPost } from './post.interface'
+import { TPost } from './post.interface'
 import Post from './post.model'
 
 const createPostIntoDB = async (payload: TPost) => {
@@ -32,30 +32,9 @@ const getSinglePostFromDB = async (id: string) => {
   return post
 }
 
-// comment
-
-const commentIntoPost = async (id: string, payload: TComment) => {
-  const post = await Post.findById(id)
-  if (!post) {
-    throw new Error('Post not found')
-  }
-  // Initialize comments if it is undefined
-  if (!post.comments) {
-    post.comments = []
-  }
-  // Push the new comment into the comments array
-  post.comments.push(payload)
-  post.commentsCount = post.comments.length
-  // Save the updated post
-  const updatedPost = await post.save()
-
-  return updatedPost
-}
-
 export const postServices = {
   createPostIntoDB,
   getAllPostsFromDB,
   getSinglePostFromDB,
   updatePostIntoDB,
-  commentIntoPost,
 }

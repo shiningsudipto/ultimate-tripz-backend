@@ -9,23 +9,19 @@ import { TRecoverPassword } from '../user/user.interface'
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
-  // console.log(payload)
   const user = await User.isUserExistsByEmail(payload.email)
-  // console.log(user)
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !')
   }
-
   //checking if the password is correct
-
   if (!(await User.isPasswordMatched(payload?.password, user?.password)))
     throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched')
-
   //create token and sent to the  client
-
   const jwtPayload = {
     email: user.email,
     role: user.role,
+    status: user.status,
+    id: user._id,
   }
 
   const accessToken = createToken(

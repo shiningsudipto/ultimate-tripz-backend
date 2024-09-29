@@ -18,11 +18,6 @@ router.put(
   auth(USER_ROLE.admin, USER_ROLE.user),
   postControllers.updatePost,
 )
-router.post(
-  '/comment/:id',
-  auth(USER_ROLE.admin, USER_ROLE.user),
-  postControllers.postComment,
-)
 router.delete(
   '/delete-post/:id',
   auth(USER_ROLE.admin, USER_ROLE.user),

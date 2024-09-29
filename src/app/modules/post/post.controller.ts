@@ -77,18 +77,6 @@ const updatePost = catchAsync(async (req, res) => {
     data: result,
   })
 })
-// comment
-const postComment = catchAsync(async (req, res) => {
-  const { id } = req.params
-  const payload = req.body
-  const result = postServices.commentIntoPost(id, payload)
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Commented successfully',
-    data: result,
-  })
-})
 
 export const postControllers = {
   createPost,
@@ -96,5 +84,4 @@ export const postControllers = {
   getSinglePost,
   updatePost,
   deletePost,
-  postComment,
 }
