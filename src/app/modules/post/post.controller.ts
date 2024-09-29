@@ -34,5 +34,26 @@ const getAllPosts = catchAsync(async (req, res) => {
     data: result,
   })
 })
+const updatePost = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const postInfo = req.body
 
-export const postControllers = { createPost, getAllPosts }
+  const files = req.files as TImageFiles
+  const postImages = files?.images
+
+  const payload: Partial<TPost> = {
+    ...postInfo,
+    ...(postImages ? { images: postImages } : {}),
+  }
+
+  const result = await postServices.updatePostIntoDB(id, payload)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Post retrieved successfully',
+    data: result,
+  })
+})
+
+export const postControllers = { createPost, getAllPosts, updatePost }
