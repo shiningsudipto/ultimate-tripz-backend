@@ -10,6 +10,7 @@ export interface TPost {
   images?: string[]
   tags: 'premium' | 'everyone'
   comments?: TComment[]
+  commentsCount?: number
   upVotes?: number
   downVotes?: number
   author: Types.ObjectId

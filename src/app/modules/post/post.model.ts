@@ -21,6 +21,7 @@ const PostSchema: Schema = new Schema<TPost>(
     upVotes: { type: Number, default: 0 },
     downVotes: { type: Number, default: 0 },
     comments: [CommentSchema],
+    commentsCount: { type: Number, default: 0 },
     author: { type: Schema.Types.ObjectId, ref: 'user', required: true },
   },
   {

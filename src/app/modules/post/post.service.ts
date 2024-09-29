@@ -6,7 +6,9 @@ const createPostIntoDB = async (payload: TPost) => {
   return result
 }
 const getAllPostsFromDB = async () => {
-  const result = await Post.find().populate('author', '_id name email avatar')
+  const result = await Post.find()
+    .populate('author', '_id name email avatar')
+    .select({ comments: 0 })
   return result
 }
 const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {
@@ -43,6 +45,7 @@ const commentIntoPost = async (id: string, payload: TComment) => {
   }
   // Push the new comment into the comments array
   post.comments.push(payload)
+  post.commentsCount = post.comments.length
   // Save the updated post
   const updatedPost = await post.save()
 
