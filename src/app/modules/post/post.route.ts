@@ -12,6 +12,7 @@ const router = express.Router()
 // post routes
 
 router.get('/all-posts', postControllers.getAllPosts)
+router.get('/single-post/:id', postControllers.getSinglePost)
 router.put(
   '/update-post/:id',
   auth(USER_ROLE.admin, USER_ROLE.user),

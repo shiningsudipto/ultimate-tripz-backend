@@ -6,12 +6,7 @@ const createPostIntoDB = async (payload: TPost) => {
   return result
 }
 const getAllPostsFromDB = async () => {
-  const result = await Post.find()
-    .populate('author', '_id name email avatar')
-    .populate({
-      path: 'comments.commenter', // Specify the path to populate
-      select: '_id name email avatar', // Fields to select from the commenter document
-    })
+  const result = await Post.find().populate('author', '_id name email avatar')
   return result
 }
 const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {
@@ -22,23 +17,32 @@ const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {
   return result
 }
 
+const getSinglePostFromDB = async (id: string) => {
+  const post = await Post.findById(id)
+    .populate('author', '_id name email avatar')
+    .populate({
+      path: 'comments.commenter',
+      select: '_id name email avatar',
+    })
+  if (!post) {
+    throw new Error('Post not found')
+  }
+  return post
+}
+
 // comment
 
 const commentIntoPost = async (id: string, payload: TComment) => {
   const post = await Post.findById(id)
-  console.log('post', post)
   if (!post) {
     throw new Error('Post not found')
   }
-
   // Initialize comments if it is undefined
   if (!post.comments) {
     post.comments = []
   }
-
   // Push the new comment into the comments array
   post.comments.push(payload)
-
   // Save the updated post
   const updatedPost = await post.save()
 
@@ -48,6 +52,7 @@ const commentIntoPost = async (id: string, payload: TComment) => {
 export const postServices = {
   createPostIntoDB,
   getAllPostsFromDB,
+  getSinglePostFromDB,
   updatePostIntoDB,
   commentIntoPost,
 }

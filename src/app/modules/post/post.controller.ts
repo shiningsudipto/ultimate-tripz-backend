@@ -31,6 +31,17 @@ const getAllPosts = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
+    message: 'Posts retrieved successfully',
+    data: result,
+  })
+})
+const getSinglePost = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await postServices.getSinglePostFromDB(id)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
     message: 'Post retrieved successfully',
     data: result,
   })
@@ -82,6 +93,7 @@ const postComment = catchAsync(async (req, res) => {
 export const postControllers = {
   createPost,
   getAllPosts,
+  getSinglePost,
   updatePost,
   deletePost,
   postComment,
