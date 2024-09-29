@@ -26,8 +26,19 @@ const editPostComment = catchAsync(async (req, res) => {
     data: result,
   })
 })
+const getAllCommentsByPost = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await commentServices.getCommentsByPostFromDB(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Comment retrieved successfully',
+    data: result,
+  })
+})
 
 export const commentControllers = {
   postComment,
   editPostComment,
+  getAllCommentsByPost,
 }

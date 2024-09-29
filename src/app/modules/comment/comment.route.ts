@@ -13,5 +13,6 @@ router.post(
 )
 
 router.put('/update/:id', commentControllers.editPostComment)
+router.get('/post/:id', commentControllers.getAllCommentsByPost)
 
 export const CommentRoutes = router

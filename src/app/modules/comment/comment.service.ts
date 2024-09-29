@@ -42,7 +42,13 @@ const EditCommentIntoPost = async (id: string, payload: TComment) => {
   return result
 }
 
+const getCommentsByPostFromDB = async (id: string) => {
+  const result = await Comment.find({ postId: id })
+  return result
+}
+
 export const commentServices = {
   commentIntoPost,
   EditCommentIntoPost,
+  getCommentsByPostFromDB,
 }
