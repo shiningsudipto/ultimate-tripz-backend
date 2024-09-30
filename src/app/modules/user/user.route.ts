@@ -14,6 +14,8 @@ router.get('/my-bookings', auth(USER_ROLE.user), userControllers.getMyBookings)
 router.get('/users', auth(USER_ROLE.admin), userControllers.getAllUser)
 router.get('/user-info', userControllers.getUserByEmail)
 router.post('/follow', userControllers.follow)
+router.get('/get-followers/:id', userControllers.getFollowers)
+router.get('/get-following/:id', userControllers.getFollowing)
 
 router.put(
   '/update-user/:id',

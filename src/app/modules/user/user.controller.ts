@@ -94,6 +94,26 @@ const follow = catchAsync(async (req, res) => {
     data: result,
   })
 })
+const getFollowers = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await userServices.getFollowersFromDB(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Followers retrieved successfully',
+    data: result,
+  })
+})
+const getFollowing = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await userServices.getFollowingFromDB(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Following users retrieved successfully',
+    data: result,
+  })
+})
 
 export const userControllers = {
   createUser,
@@ -102,4 +122,6 @@ export const userControllers = {
   getUserByEmail,
   updateUser,
   follow,
+  getFollowers,
+  getFollowing,
 }
