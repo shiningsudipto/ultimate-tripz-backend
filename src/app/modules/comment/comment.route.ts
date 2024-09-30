@@ -14,5 +14,6 @@ router.post(
 
 router.put('/update/:id', commentControllers.editPostComment)
 router.get('/post/:id', commentControllers.getAllCommentsByPost)
+router.delete('/delete/:id', commentControllers.deleteComment)
 
 export const CommentRoutes = router

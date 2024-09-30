@@ -41,9 +41,22 @@ const EditCommentIntoPost = async (id: string, payload: TComment) => {
   )
   return result
 }
-
 const getCommentsByPostFromDB = async (id: string) => {
   const result = await Comment.find({ postId: id })
+  return result
+}
+const deleteCommentFromDB = async (id: string, userId: string) => {
+  const isCommentAvailable = await Comment.findById(id)
+  if (!isCommentAvailable) {
+    throw new Error('Comment not found')
+  }
+  const isSameUser = new Types.ObjectId(userId).equals(
+    isCommentAvailable.userId,
+  )
+  if (!isSameUser) {
+    throw new Error('You are not authorized to delete')
+  }
+  const result = await Comment.findByIdAndDelete(id)
   return result
 }
 
@@ -51,4 +64,5 @@ export const commentServices = {
   commentIntoPost,
   EditCommentIntoPost,
   getCommentsByPostFromDB,
+  deleteCommentFromDB,
 }
