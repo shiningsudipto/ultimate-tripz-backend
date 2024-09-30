@@ -10,6 +10,12 @@ const commentIntoPost = async (id: string, payload: TComment) => {
   }
   const result = await Comment.create(payload)
 
+  // Increment the commentsCount by 1
+  post.commentsCount = (post.commentsCount || 0) + 1
+
+  // Save the updated post
+  await post.save()
+
   return result
 }
 const EditCommentIntoPost = async (id: string, payload: TComment) => {
@@ -57,6 +63,21 @@ const deleteCommentFromDB = async (id: string, userId: string) => {
     throw new Error('You are not authorized to delete')
   }
   const result = await Comment.findByIdAndDelete(id)
+
+  const postId = isCommentAvailable.postId
+
+  // Step 4: Find the post and decrement the commentsCount
+  const post = await Post.findById(postId)
+  if (!post) {
+    throw new Error('Post not found')
+  }
+
+  // Decrement the commentsCount by 1
+  post.commentsCount = (post.commentsCount || 0) - 1
+
+  // Save the updated post
+  await post.save()
+
   return result
 }
 
