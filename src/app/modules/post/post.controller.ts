@@ -5,6 +5,7 @@ import { TPost } from './post.interface'
 import { TImageFiles } from '../../interface/image.interface'
 import { postServices } from './post.service'
 import Post from './post.model'
+import { getUserInfoFromToken } from '../../utils/getUserInfoFromToken'
 
 const createPost = catchAsync(async (req, res) => {
   const postInfo = req.body
@@ -77,6 +78,30 @@ const updatePost = catchAsync(async (req, res) => {
     data: result,
   })
 })
+const upVotePost = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const token = req.headers.authorization
+  const { id: userId } = getUserInfoFromToken(token as string)
+  const result = await postServices.upVotePostIntoDB(id, userId)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Post deleted successfully',
+    data: result,
+  })
+})
+const downVotePost = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const token = req.headers.authorization
+  const { id: userId } = getUserInfoFromToken(token as string)
+  const result = await postServices.downVotePostIntoDB(id, userId)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Post deleted successfully',
+    data: result,
+  })
+})
 
 export const postControllers = {
   createPost,
@@ -84,4 +109,6 @@ export const postControllers = {
   getSinglePost,
   updatePost,
   deletePost,
+  upVotePost,
+  downVotePost,
 }

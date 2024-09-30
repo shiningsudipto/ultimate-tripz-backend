@@ -41,7 +41,6 @@ const deleteComment = catchAsync(async (req, res) => {
   const token = req.headers.authorization
   const { id: userId } = getUserInfoFromToken(token as string)
   const { id } = req.params
-  console.log(userId, id)
   const result = await commentServices.deleteCommentFromDB(id, userId)
   sendResponse(res, {
     statusCode: httpStatus.OK,

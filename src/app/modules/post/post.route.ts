@@ -12,6 +12,8 @@ const router = express.Router()
 // post routes
 
 router.get('/all-posts', postControllers.getAllPosts)
+router.post('/upvote/:id', postControllers.upVotePost)
+router.post('/downvote/:id', postControllers.downVotePost)
 router.get('/single-post/:id', postControllers.getSinglePost)
 router.put(
   '/update-post/:id',

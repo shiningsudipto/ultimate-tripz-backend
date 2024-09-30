@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 import { TPost } from './post.interface'
 import Post from './post.model'
 
@@ -18,7 +19,6 @@ const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {
   })
   return result
 }
-
 const getSinglePostFromDB = async (id: string) => {
   const post = await Post.findById(id)
     .populate('author', '_id name email avatar')
@@ -31,10 +31,52 @@ const getSinglePostFromDB = async (id: string) => {
   }
   return post
 }
+const upVotePostIntoDB = async (id: string, userId: string) => {
+  const postData = await Post.findById(id)
+  if (!postData) {
+    throw new Error('Post not available!')
+  }
+  const userObjectId = new Types.ObjectId(userId)
+  const postObjectId = new Types.ObjectId(id)
+  const isVoted = postData.upVotes.includes(userObjectId)
+  if (isVoted) {
+    const result = await Post.findByIdAndUpdate(postObjectId, {
+      $pull: { upVotes: userId },
+    })
+    return result
+  } else {
+    const result = await Post.findByIdAndUpdate(userObjectId, {
+      $push: { upVotes: userId },
+    })
+    return result
+  }
+}
+const downVotePostIntoDB = async (id: string, userId: string) => {
+  const postData = await Post.findById(id)
+  if (!postData) {
+    throw new Error('Post not available!')
+  }
+  const userObjectId = new Types.ObjectId(userId)
+  const postObjectId = new Types.ObjectId(id)
+  const isVoted = postData.upVotes.includes(userObjectId)
+  if (isVoted) {
+    const result = await Post.findByIdAndUpdate(postObjectId, {
+      $pull: { downVotes: userId },
+    })
+    return result
+  } else {
+    const result = await Post.findByIdAndUpdate(userObjectId, {
+      $push: { downVotes: userId },
+    })
+    return result
+  }
+}
 
 export const postServices = {
   createPostIntoDB,
   getAllPostsFromDB,
   getSinglePostFromDB,
   updatePostIntoDB,
+  upVotePostIntoDB,
+  downVotePostIntoDB,
 }
