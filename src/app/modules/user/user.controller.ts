@@ -84,10 +84,22 @@ const getMyBookings = catchAsync(async (req, res) => {
   })
 })
 
+const follow = catchAsync(async (req, res) => {
+  const payload = req.body
+  const result = await userServices.followUser(payload)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User retrieved successfully',
+    data: result,
+  })
+})
+
 export const userControllers = {
   createUser,
   getMyBookings,
   getAllUser,
   getUserByEmail,
   updateUser,
+  follow,
 }

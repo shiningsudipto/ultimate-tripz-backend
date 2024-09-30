@@ -21,6 +21,8 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     avatar: { type: String },
     address: { type: String, required: false },
+    followers: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
+    following: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
   },
   {
     timestamps: true,

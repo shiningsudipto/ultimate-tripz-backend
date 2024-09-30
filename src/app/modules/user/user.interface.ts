@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
-import { Model } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import { USER_ROLE } from './user.constant'
 
 export type TUser = {
@@ -12,6 +12,13 @@ export type TUser = {
   status: 'basic' | 'premium'
   address?: string
   avatar: string
+  following: Types.ObjectId[] // Use array of ObjectIds directly without wrapping in an object
+  followers: Types.ObjectId[] // Same for followers
+}
+
+export type TFollow = {
+  userId: Types.ObjectId
+  targetedId: Types.ObjectId
 }
 
 export interface UserModel extends Model<TUser> {
@@ -26,28 +33,9 @@ export interface UserModel extends Model<TUser> {
 
 export type TUserRole = keyof typeof USER_ROLE
 
-interface IService {
-  _id: string
-  name: string
-  description: string
-  price: number
-  duration: number
-}
-
-interface ISlot {
-  _id: string
-  service: string
-  date: string // ISO 8601 date string
-  startTime: string // Time in "HH:MM" format
-  endTime: string // Time in "HH:MM" format
-  isBooked: string // Status of the booking
-}
-
 export interface IBooking {
   _id: string
   customer: string // User ID
-  service: IService
-  slot: ISlot
   vehicleType: string
   vehicleBrand: string
   vehicleModel: string
