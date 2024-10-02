@@ -36,6 +36,26 @@ const getAllPosts = catchAsync(async (req, res) => {
     data: result,
   })
 })
+const getPopularPosts = catchAsync(async (req, res) => {
+  const result = await Post.find()
+    .sort({ upVotes: -1 })
+    .limit(3)
+    .populate('author', '_id name avatar')
+    .select({
+      images: 0,
+      downVotes: 0,
+      commentsCount: 0,
+      category: 0,
+      comments: 0,
+    })
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Top 3 posts retrieved successfully',
+    data: result,
+  })
+})
 const getSinglePost = catchAsync(async (req, res) => {
   const { id } = req.params
   const result = await postServices.getSinglePostFromDB(id)
@@ -86,7 +106,7 @@ const upVotePost = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Post deleted successfully',
+    message: 'Voted successfully',
     data: result,
   })
 })
@@ -106,6 +126,7 @@ const downVotePost = catchAsync(async (req, res) => {
 export const postControllers = {
   createPost,
   getAllPosts,
+  getPopularPosts,
   getSinglePost,
   updatePost,
   deletePost,

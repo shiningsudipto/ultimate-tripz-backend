@@ -48,7 +48,10 @@ const EditCommentIntoPost = async (id: string, payload: TComment) => {
   return result
 }
 const getCommentsByPostFromDB = async (id: string) => {
-  const result = await Comment.find({ postId: id })
+  const result = await Comment.find({ postId: id }).populate(
+    'userId',
+    '_id name avatar',
+  )
   return result
 }
 const deleteCommentFromDB = async (id: string, userId: string) => {

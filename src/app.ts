@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
-    origin: ['https://car-wash-zeta-one.vercel.app', 'http://localhost:5173'], // Allow your frontend URL
+    origin: ['http://localhost:3000'], // Allow your frontend URL
     credentials: true, // Allow credentials to be included
   }),
 )

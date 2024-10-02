@@ -17,7 +17,7 @@ const PostSchema: Schema = new Schema<TPost>(
     title: { type: String, required: true },
     content: { type: String, required: true },
     images: [{ type: String }],
-    tags: { type: String, enum: ['premium', 'everyone'], required: true },
+    tags: { type: String, enum: ['premium', 'regular'], required: true },
     upVotes: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
     downVotes: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
     comments: [CommentSchema],

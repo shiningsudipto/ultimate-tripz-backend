@@ -19,10 +19,10 @@ const userSchema = new Schema<TUser, UserModel>(
       enum: ['basic', 'premium'],
       default: 'basic',
     },
-    avatar: { type: String },
+    avatar: { type: String, required: false },
     address: { type: String, required: false },
-    followers: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
-    following: [{ type: Schema.Types.ObjectId, ref: 'user', required: true }],
+    followers: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+    following: [{ type: Schema.Types.ObjectId, ref: 'user' }],
   },
   {
     timestamps: true,
