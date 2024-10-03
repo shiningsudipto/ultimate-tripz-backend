@@ -130,7 +130,7 @@ const downVotePost = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Post deleted successfully',
+    message: 'Down voted successfully',
     data: result,
   })
 })

@@ -83,6 +83,12 @@ const upVotePostIntoDB = async (id: string, userId: string) => {
     throw new Error('Post not available!')
   }
   const userObjectId = new Types.ObjectId(userId)
+  const isDownVoted = postData.downVotes.includes(userObjectId)
+  if (isDownVoted) {
+    await Post.findByIdAndUpdate(id, {
+      $pull: { downVotes: userId },
+    })
+  }
   const isVoted = postData.upVotes.includes(userObjectId)
   if (isVoted) {
     const result = await Post.findByIdAndUpdate(id, {
@@ -102,7 +108,13 @@ const downVotePostIntoDB = async (id: string, userId: string) => {
     throw new Error('Post not available!')
   }
   const userObjectId = new Types.ObjectId(userId)
-  const isVoted = postData.upVotes.includes(userObjectId)
+  const isUpVoted = postData.upVotes.includes(userObjectId)
+  if (isUpVoted) {
+    await Post.findByIdAndUpdate(id, {
+      $pull: { upVotes: userId },
+    })
+  }
+  const isVoted = postData.downVotes.includes(userObjectId)
   if (isVoted) {
     const result = await Post.findByIdAndUpdate(id, {
       $pull: { downVotes: userId },
