@@ -19,7 +19,7 @@ app.use(
 app.use('/api', router)
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello Assignment 3!')
+  res.send('Ultimate Tripz Running!')
 })
 app.use(globalErrorHandler)
 

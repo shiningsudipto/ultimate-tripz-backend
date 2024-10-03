@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 import { transactionId } from '../../utils/utils'
 import { initiatePayment } from '../payment/payment.utils'
 import { User } from '../user/user.model'
@@ -26,8 +27,10 @@ const createBookingIntoDB = async (
 
   const paymentRes = await initiatePayment(paymentData)
 
+  const customerId = new Types.ObjectId(userInfo._id)
+
   const newBookingData: Partial<TBooking> = {
-    customer: userInfo._id,
+    customer: customerId,
     vehicleType: bookingData.vehicleType,
     vehicleBrand: bookingData.vehicleBrand,
     vehicleModel: bookingData.vehicleModel,
