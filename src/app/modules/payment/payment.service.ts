@@ -1,6 +1,6 @@
 import config from '../../config'
-import { TBooking } from '../booking/booking.interface'
 import { Booking } from '../booking/booking.model'
+import { User } from '../user/user.model'
 import { verifyPayment } from './payment.utils'
 
 const confirmationService = async (
@@ -11,9 +11,9 @@ const confirmationService = async (
   const verifyResponse = await verifyPayment(transactionId)
 
   if (verifyResponse && verifyResponse?.pay_status === 'Successful') {
-    const bookingInfo = (await Booking.findOne({
-      tran_id: transactionId,
-    })) as TBooking
+    const bookingInfo = await Booking.find({ tran_id: transactionId })
+    const userId = bookingInfo[0]?.user
+    await User.findByIdAndUpdate(userId, { status: 'premium' }, { new: true })
 
     await Booking.findOneAndUpdate(
       { tran_id: transactionId },

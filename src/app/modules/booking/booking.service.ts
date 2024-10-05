@@ -21,7 +21,6 @@ const createBookingIntoDB = async (
     customerName: userInfo.name,
     customerEmail: email,
     customerPhone: userInfo.phone,
-    customerAddress: userInfo.address,
     paidStatus: 'booked',
   }
 
@@ -30,23 +29,12 @@ const createBookingIntoDB = async (
   const customerId = new Types.ObjectId(userInfo._id)
 
   const newBookingData: Partial<TBooking> = {
-    customer: customerId,
-    vehicleType: bookingData.vehicleType,
-    vehicleBrand: bookingData.vehicleBrand,
-    vehicleModel: bookingData.vehicleModel,
-    manufacturingYear: bookingData.manufacturingYear,
-    registrationPlate: bookingData.registrationPlate,
+    user: customerId,
     tran_id: transactionId,
     status: 'pending',
   }
 
   await Booking.create(newBookingData)
-
-  // const populatedBooking = await Booking.findById(newBooking._id)
-  //   .populate('customer', '_id name email phone address')
-  //   .populate('service', '_id name description price duration isDeleted')
-  //   .populate('slot', '_id service date startTime endTime isBooked')
-  //   .lean()
 
   return paymentRes
 }

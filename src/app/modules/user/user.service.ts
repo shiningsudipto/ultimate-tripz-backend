@@ -39,7 +39,6 @@ const getUserByIdFromDB = async (id: string) => {
   }
   return result
 }
-
 const getMyBookingsFromDb = async (email: string) => {
   // const result = await Booking.find().populate('customer')
   const user = await User.findOne({ email })
@@ -56,12 +55,10 @@ const getMyBookingsFromDb = async (email: string) => {
     return result
   }
 }
-
 type FollowPayload = {
   userId: string // Assuming you're passing userId and targetedId as strings
   targetedId: string
 }
-
 const followUser = async (payload: FollowPayload) => {
   const { userId, targetedId } = payload
 
@@ -94,7 +91,6 @@ const followUser = async (payload: FollowPayload) => {
     return 'Followed successfully'
   }
 }
-
 const getFollowersFromDB = async (id: string) => {
   // Find the user by ID and populate the followers field
   const userWithFollowers = await User.findById(id)
