@@ -12,6 +12,7 @@ const router = express.Router()
 // post routes
 
 router.get('/all-posts', postControllers.getAllPosts)
+router.get('/all-active-inactive-posts', postControllers.getAllAcInacPosts)
 router.get('/posts-by-author/:id', postControllers.getPostsByAuthor)
 router.get('/popular', postControllers.getPopularPosts)
 router.post('/upvote/:id', postControllers.upVotePost)
@@ -19,7 +20,8 @@ router.post('/downvote/:id', postControllers.downVotePost)
 router.get('/single-post/:id', postControllers.getSinglePost)
 router.put(
   '/update-post/:id',
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  multerUpload.single('image'),
+  parseBody,
   postControllers.updatePost,
 )
 router.delete(
@@ -30,7 +32,7 @@ router.delete(
 
 router.post(
   '/create-post',
-  multerUpload.fields([{ name: 'images' }]),
+  multerUpload.single('image'),
   parseBody,
   postControllers.createPost,
 )

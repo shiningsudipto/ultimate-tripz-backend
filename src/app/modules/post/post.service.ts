@@ -18,7 +18,9 @@ const getAllPostsFromDB = async (query: PostQueryParams) => {
   const { searchTerm, sort, category, tag } = query
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const filter: any = {}
+  const filter: any = {
+    isActive: { $ne: false }, // Filter for active posts
+  }
 
   // Search by title or content
   if (searchTerm) {
@@ -47,7 +49,7 @@ const getAllPostsFromDB = async (query: PostQueryParams) => {
   }
 
   const result = await Post.find(filter)
-    .populate('author', '_id name email avatar')
+    .populate('author', '_id name email avatar followers')
     .sort(sortOption)
     .select({ comments: 0 })
 
@@ -55,7 +57,9 @@ const getAllPostsFromDB = async (query: PostQueryParams) => {
 }
 
 const getPostsByAuthorFromDB = async (id: string) => {
-  const result = await Post.find({ author: id }).select({ comments: 0 })
+  const result = await Post.find({ author: id })
+    .select({ comments: 0 })
+    .populate('author', '_id name avatar')
   return result
 }
 const updatePostIntoDB = async (id: string, payload: Partial<TPost>) => {

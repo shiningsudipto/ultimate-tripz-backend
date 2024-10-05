@@ -15,11 +15,28 @@ const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
   })
   return result
 }
+const updateUserRoleIntoDB = async (id: string, payload: Partial<TUser>) => {
+  const result = await User.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  })
+  return result
+}
 const getUserFromDB = async (email: string) => {
   const result = await User.findOne({ email }).populate(
     'following followers',
     '_id name avatar',
   )
+  return result
+}
+const getUserByIdFromDB = async (id: string) => {
+  const result = await User.findById(id).populate(
+    'following followers',
+    '_id name avatar',
+  )
+  if (!result) {
+    throw new Error('User not found!')
+  }
   return result
 }
 
@@ -66,7 +83,7 @@ const followUser = async (payload: FollowPayload) => {
     await User.findByIdAndUpdate(targetedObjectId, {
       $pull: { followers: userObjectId },
     })
-    return { message: 'Unfollowed successfully' }
+    return 'Unfollowed successfully'
   } else {
     await User.findByIdAndUpdate(userObjectId, {
       $push: { following: targetedObjectId },
@@ -74,7 +91,7 @@ const followUser = async (payload: FollowPayload) => {
     await User.findByIdAndUpdate(targetedObjectId, {
       $push: { followers: userObjectId },
     })
-    return { message: 'Followed successfully' }
+    return 'Followed successfully'
   }
 }
 
@@ -105,7 +122,9 @@ export const userServices = {
   createUserIntoDb,
   getMyBookingsFromDb,
   getUserFromDB,
+  getUserByIdFromDB,
   updateUserIntoDB,
+  updateUserRoleIntoDB,
   followUser,
   getFollowersFromDB,
   getFollowingFromDB,

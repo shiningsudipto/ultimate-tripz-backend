@@ -46,6 +46,16 @@ const getUserByEmail = catchAsync(async (req, res) => {
     data: result,
   })
 })
+const getUserById = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await userServices.getUserByIdFromDB(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User retrieved successfully',
+    data: result,
+  })
+})
 const getSingleUser = catchAsync(async (req, res) => {
   const { email } = req.params
   const result = await userServices.getUserFromDB(email)
@@ -67,6 +77,19 @@ const updateUser = catchAsync(async (req, res) => {
     ...(userAvatar ? { avatar: userAvatar } : {}), // Only include avatar if it exists
   }
   const result = await userServices.updateUserIntoDB(id, updatedUserData)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully',
+    data: result,
+  })
+})
+const updateUserRole = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const userInfo = req.body
+  console.log(id, userInfo)
+  const result = await userServices.updateUserIntoDB(id, userInfo)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -130,8 +153,10 @@ export const userControllers = {
   getMyBookings,
   getAllUser,
   getUserByEmail,
+  getUserById,
   getSingleUser,
   updateUser,
+  updateUserRole,
   follow,
   getFollowers,
   getFollowing,

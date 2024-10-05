@@ -21,7 +21,7 @@ export interface TComment {
 export interface TPost {
   title: string
   content: string
-  images?: string[]
+  cover: string
   tags: 'premium' | 'everyone'
   comments?: TComment[]
   commentsCount?: number
@@ -29,4 +29,5 @@ export interface TPost {
   downVotes: Types.ObjectId[]
   author: Types.ObjectId
   category: TCategory
+  isActive: boolean
 }

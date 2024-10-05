@@ -14,6 +14,7 @@ router.get('/my-bookings', auth(USER_ROLE.user), userControllers.getMyBookings)
 router.get('/users', auth(USER_ROLE.admin), userControllers.getAllUser)
 router.get('/user-info', userControllers.getUserByEmail)
 router.get('/user/:email', userControllers.getSingleUser)
+router.get('/user-by-id/:id', userControllers.getUserById)
 router.post('/follow', userControllers.follow)
 router.get('/get-followers/:id', userControllers.getFollowers)
 router.get('/get-following/:id', userControllers.getFollowing)
@@ -26,5 +27,6 @@ router.put(
   validateRequest(UserValidations.updateUserValidationSchema),
   userControllers.updateUser,
 )
+router.put('/update-user-role/:id', userControllers.updateUserRole)
 
 export const UserRoutes = router
