@@ -18,6 +18,7 @@ router.post(
   validateRequest(AuthValidation.loginValidationSchema),
   AuthControllers.loginUser,
 )
+router.post('/refresh-token', AuthControllers.getRefreshToken)
 router.post(
   '/registration',
   multerUpload.fields([{ name: 'avatar' }]),

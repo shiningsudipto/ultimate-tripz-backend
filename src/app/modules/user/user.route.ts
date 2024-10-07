@@ -18,7 +18,11 @@ router.get('/user-by-id/:id', userControllers.getUserById)
 router.post('/follow', userControllers.follow)
 router.get('/get-followers/:id', userControllers.getFollowers)
 router.get('/get-following/:id', userControllers.getFollowing)
-router.get('/statistics', userControllers.getSiteStatistics)
+router.get(
+  '/statistics',
+  auth(USER_ROLE.admin),
+  userControllers.getSiteStatistics,
+)
 
 router.put(
   '/update-user/:id',

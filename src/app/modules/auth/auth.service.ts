@@ -5,7 +5,23 @@ import { TLoginUser } from './auth.interface'
 import { createToken } from './auth.utils'
 import { User } from '../user/user.model'
 import bcrypt from 'bcrypt'
-import { TRecoverPassword } from '../user/user.interface'
+import { TRecoverPassword, TUser } from '../user/user.interface'
+
+export const generateToken = (user: TUser) => {
+  const jwtPayload = {
+    email: user.email,
+    role: user.role,
+    status: user.status,
+    id: user._id,
+  }
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  )
+  return accessToken
+}
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
@@ -34,6 +50,14 @@ const loginUser = async (payload: TLoginUser) => {
     accessToken: accessToken,
     user,
   }
+}
+
+const refreshToken = async (id: string) => {
+  const user = await User.findById(id)
+  if (!user) {
+    throw new Error('User not available')
+  }
+  return generateToken(user)
 }
 
 const hashPassword = async (password: string): Promise<string> => {
@@ -76,4 +100,5 @@ export const AuthServices = {
   loginUser,
   recoverPasswordIntoDB,
   changePasswordIntoDB,
+  refreshToken,
 }

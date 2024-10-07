@@ -12,7 +12,11 @@ const router = express.Router()
 // post routes
 
 router.get('/all-posts', postControllers.getAllPosts)
-router.get('/all-active-inactive-posts', postControllers.getAllAcInacPosts)
+router.get(
+  '/all-active-inactive-posts',
+  auth(USER_ROLE.admin),
+  postControllers.getAllAcInacPosts,
+)
 router.get('/posts-by-author/:id', postControllers.getPostsByAuthor)
 router.get('/popular', postControllers.getPopularPosts)
 router.post('/upvote/:id', postControllers.upVotePost)
