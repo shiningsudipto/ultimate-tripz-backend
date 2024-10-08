@@ -49,7 +49,7 @@ const getAllPostsFromDB = async (query: PostQueryParams) => {
   }
 
   const result = await Post.find(filter)
-    .populate('author', '_id name email avatar followers')
+    .populate('author', '_id name email avatar followers status')
     .sort(sortOption)
     .select({ comments: 0 })
 

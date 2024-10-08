@@ -81,17 +81,42 @@ const getPostsByAuthor = catchAsync(async (req, res) => {
   })
 })
 const getPopularPosts = catchAsync(async (req, res) => {
-  const result = await Post.find()
-    .sort({ upVotes: -1 })
-    .limit(3)
-    .populate('author', '_id name avatar')
-    .select({
-      images: 0,
-      downVotes: 0,
-      commentsCount: 0,
-      category: 0,
-      comments: 0,
-    })
+  const result = await Post.aggregate([
+    {
+      $addFields: {
+        upVotesCount: { $size: '$upVotes' }, // Add a field to calculate the length of the upVotes array
+      },
+    },
+    {
+      $sort: { upVotesCount: -1 }, // Sort by the length of the upVotes array in descending order
+    },
+    {
+      $limit: 3,
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'author',
+        foreignField: '_id',
+        as: 'author',
+      },
+    },
+    {
+      $unwind: '$author',
+    },
+    {
+      $project: {
+        images: 0,
+        downVotes: 0,
+        commentsCount: 0,
+        category: 0,
+        comments: 0,
+        'author.email': 0,
+        'author.followers': 0,
+        __v: 0,
+      },
+    },
+  ])
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
