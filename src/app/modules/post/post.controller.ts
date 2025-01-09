@@ -60,7 +60,7 @@ const getAllPosts = catchAsync(async (req, res) => {
   })
 })
 const getAllAcInacPosts = catchAsync(async (req, res) => {
-  const result = await Post.find()
+  const result = await Post.find().populate('author', '_id name status avatar')
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
